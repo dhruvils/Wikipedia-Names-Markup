@@ -1,0 +1,77 @@
+README
+
+There are 4 main parts to this project:
+	1. Generating a list of names from wikipedia in multiple languages
+	2. Gathering articles corresponding to the list of names
+	3. Marking the articles in a way StanfordNER system will understand
+	4. Training and testing with the StanfordNER system
+
+Part 1: Name extraction from wikipedia
+
+This part is a straightforward querying of wikipedia for a list of names of all the people who were born or died in a certain year.
+
+Source Files - NameCrawler.java
+
+Part 2: Article and Backlink extraction from wikipedia
+
+This part involves iterating through the list of names generated in Part 1 and querying wikipedia for their corresponding articles in every possible language and queying of all the backlinks that point to the corresponding article. The backlinks are later used as a list of potential names that can be marked up in Part 3.
+
+Note: I tried querying wikipedia dumps for the data, thus taking it offline. But in order to get similar results, it required querying through an online form, thereby defeating the purpose of using offline data.
+
+Source Files - article-extractor.py
+Command Line - python article-extractor.py
+Requirements - Requires the "wikipedia-names" file in the same folder as the source file.
+Output - ./data/<articles | backlinks>/<language>/<extracted files from wikipedia>
+
+Part 2.5: Generate Stopwords
+
+Consider there to be an intermediate step before we can actually start marking the data.
+	- We need to generate the stopwords
+		> To generate the stopwords, we need to run the generate_stopwords.py file on the command line.
+Source Files - generate_stopwords.py
+Command Line - python generate_stopwords.py -d <train-data-dir> -n <number of stopwords> -l <language>
+Note: language refers to the letter code of the language as supported by wikipedia, eg. en for english
+Output - <language>.pickle file of the top n stopwords
+
+Part 3: Markup of article data
+
+This is where the bulk of the processing takes place. Once all the data is in place, we should split the data in such a way that we have three different sets of data: Training data, Development data, Testing data. I haven't split the data, although I did use a heldout set that I just randomly picked from all the data gathered from Wikipedia.
+
+This involves reading one file at a time from the data set, applying two passes over the data, and marking each word as either a PERS for Person or O for Other. The two passes are:
+	1. Pass 1: From the article's backlinks, try and match the entire backlink in the article and mark each of the individual words as PERS. Thus, all the words under consideration are marked iff the entire backlink is matched correctly. 
+	2. Pass 2: In this pass, we consider individual words from the current article. We take a larger set of backlinks and try and match the word in the article to ANY word in the backlink. We use levenshtein distance to determine whether or not the words are similar enough to be considered the same.
+
+Source Files - markup.py
+Command Line - python markup.py -a <articles-dir-path> -b <backlinks-dir-path> -l <language> -s <string-edit-distance>
+Output - data/output/<language>/marked_<file-name>
+
+Part 4: Stanford NER
+
+After the data has been marked in the previous stage, we use the StanfordNER to train a model and subsequently test it on heldout data. The NER system has specific requirements that need to be generated, or otherwise made available to produce the correct result.
+
+Source Files: generate_gazzette.py, gen_prop_file.py, run_classifier.py
+
+1. generate_gazzette.py:
+Generates a gazzette of names from the backlinks files (currently limited to 12500 files)
+
+Command Line - python generate_gazzette.py -b <backlinks-dir-path> -l <language>
+Output - gazzette.txt
+
+2. gen_prop_file.py:
+Generates the properties file required by the NER system to train.
+
+Need to remove "," from the training folder. Navigate to the train-dir and then:
+Command Line - rename ',' '' *
+
+and then from the location of the source file:
+Command Line - python gen_prop_file.py -t <train-dir> -f <file-name.prop>
+Output - <file-name>.prop
+
+3. Training the NER system
+
+Command Line - java -cp stanford-ner/stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop <properties-file>.prop
+
+4. Testing the NER system
+
+Command Line - python run_classifier.py -t <test-dir>
+Output - output-gaz/classified_<filename>

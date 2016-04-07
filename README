@@ -62,6 +62,7 @@ Generates the properties file required by the NER system to train.
 
 Need to remove "," from the training folder. Navigate to the train-dir and then:
 Command Line - rename ',' '' *
+# move this to a script
 
 and then from the location of the source file:
 Command Line - python gen_prop_file.py -t <train-dir> -f <file-name.prop>
@@ -75,3 +76,5 @@ Command Line - java -cp stanford-ner/stanford-ner.jar edu.stanford.nlp.ie.crf.CR
 
 Command Line - python run_classifier.py -t <test-dir>
 Output - output-gaz/classified_<filename>
+
+# Add an example for each of the command line specifiers (for english)

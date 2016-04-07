@@ -13,6 +13,7 @@ optparser.add_option("-a", "--articles", dest="articles_path", default="data/art
 optparser.add_option("-b", "--backlinks", dest="backlinks_path", default="data/backlinks", help="Filepath of the backlinks")
 optparser.add_option("-l", "--language", dest="lang", default="en", help="language")
 optparser.add_option("-s", "--string-edit-distance", dest="edit_dist", default=0.75, type="float", help="String edit distance to match two words (between 0 and 1)")
+optparser.add_option("-w", "--stopwords", dest="stopword_file", help="Path to the stopwords pickle file")
 (opts, _) = optparser.parse_args()
 
 def get_all_files(directory):
@@ -113,6 +114,11 @@ def markup_file(article_file, backlink_full, backlink_list, lang, stopwords):
 	markup_list = pass2(markup_list, backlink_list, stopwords)
 
 	output_filepath = "data/output/%s/marked_%s" %(lang, article_file)
+	d = os.path.dirname(output_filepath)
+
+    if not os.path.exists(d):
+        os.makedirs(d)
+
 	output = open(output_filepath, "w")
 	for word, mark in markup_list:
 		outputstr = "\t%s\n" %(mark)
@@ -190,7 +196,7 @@ file_count = 0
 backlinks_path = opts.backlinks_path
 (backlink_full, backlink_set) = get_all_backlinks(backlinks_path, opts.lang)
 
-words = pickle.load(open(opts.lang + '.pickle', 'r'))
+words = pickle.load(open(stopword_file, 'r'))
 
 for filename in get_all_files(opts.articles_path + "/" + opts.lang):
 	file_exists = markup_file(filename, backlink_full, backlink_set, opts.lang, words)

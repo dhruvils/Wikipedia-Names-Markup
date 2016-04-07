@@ -47,13 +47,13 @@ def get_all_backlinks(backlinks_dirpath, lang):
 	return set(backlink_full)
 
 def write_gazzette(backlinks):
-	f = open("gazzette.txt", "w")
+	gazzette_output_path = "data/output/gazzette/%s_gazzette.txt" %(lang)
+	f = open(gazzette_output_path, "w")
 	for backlink in backlinks:
 		to_write = "PERS %s\n" %(backlink)
 		f.write(to_write.encode("utf-16"))
 	f.close()
 
 backlinks_path = opts.backlinks_path
-# backlinks_path = "/scratch-local/users/dhruvils/Part3-NamesMarkup/data/backlinks"
 backlink_full = get_all_backlinks(backlinks_path[:12500], opts.lang)
 write_gazzette(backlink_full)

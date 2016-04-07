@@ -6,7 +6,7 @@ import optparse
 read the command line options
 """
 optparser = optparse.OptionParser()
-optparser.add_option("-t", "--train", dest="train", default="train/", help="Train directory")
+optparser.add_option("-t", "--train", dest="train", default="train", help="Train directory")
 optparser.add_option("-f", "--file-name", dest="filename", help="properties file name")
 (opts, _) = optparser.parse_args()
 
@@ -20,8 +20,7 @@ def generate_prop_file(directory):
 	filelist = get_all_files(directory)
 	output = "trainFileList = "
 	for filename in filelist:
-		output += "train/" + filename.replace(",", "") + ","
-
+		output += train + "/" + filename.replace(",", "") + ","
 	output = output[:-1]
 
 	output += "\nserializeTo = ner-model.ser.gz\n\

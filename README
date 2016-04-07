@@ -42,7 +42,7 @@ This involves reading one file at a time from the data set, applying two passes 
 	2. Pass 2: In this pass, we consider individual words from the current article. We take a larger set of backlinks and try and match the word in the article to ANY word in the backlink. We use levenshtein distance to determine whether or not the words are similar enough to be considered the same.
 
 Source Files - markup.py
-Command Line - python markup.py -a <articles-dir-path> -b <backlinks-dir-path> -l <language> -s <string-edit-distance>
+Command Line - python markup.py -a <articles-dir-path> -b <backlinks-dir-path> -l <language> -s <string-edit-distance> -w <stopword-file-path>
 Output - data/output/<language>/marked_<file-name>
 
 Part 4: Stanford NER

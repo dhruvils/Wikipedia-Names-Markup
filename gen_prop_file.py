@@ -17,6 +17,9 @@ def get_all_files(directory):
 	return relativeFileList
 
 def generate_prop_file(directory):
+	command = "(cd %s ; rename ',' '' *)" %(opts.train)
+	os.system(command)
+	
 	filelist = get_all_files(directory)
 	output = "trainFileList = "
 	for filename in filelist:
@@ -50,5 +53,4 @@ gazette=gazzette.txt"
 	f.write(output)
 	f.close()
 
-directory = opts.train
-generate_prop_file(directory)
+generate_prop_file(opts.train)

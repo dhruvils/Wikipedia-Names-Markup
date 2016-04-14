@@ -30,6 +30,7 @@ Consider there to be an intermediate step before we can actually start marking t
 		> To generate the stopwords, we need to run the generate_stopwords.py file on the command line.
 Source Files - generate_stopwords.py
 Command Line - python generate_stopwords.py -d <train-data-dir> -n <number of stopwords> -l <language>
+Example - python generate_stopwords.py -d ./data/articles -n 100 -l en
 Note: language refers to the letter code of the language as supported by wikipedia, eg. en for english
 Output - <language>.pickle file of the top n stopwords
 
@@ -43,6 +44,7 @@ This involves reading one file at a time from the data set, applying two passes 
 
 Source Files - markup.py
 Command Line - python markup.py -a <articles-dir-path> -b <backlinks-dir-path> -l <language> -s <string-edit-distance> -w <stopword-file-path>
+Example - python markup.py -a ./data/articles -b ./data/backlinks -l en -s 0.75 -w en.pickle
 Output - data/output/<language>/marked_<file-name>
 
 Part 4: Stanford NER
@@ -55,26 +57,24 @@ Source Files: generate_gazzette.py, gen_prop_file.py, run_classifier.py
 Generates a gazzette of names from the backlinks files (currently limited to 12500 files)
 
 Command Line - python generate_gazzette.py -b <backlinks-dir-path> -l <language>
-Output - gazzette.txt
+Example - python generate_gazzette.py -b ./data/backlinks -l en
+Output - data/output/gazzette/<lang>_gazzette.txt
+
+# Split the output directory into training and test directories
 
 2. gen_prop_file.py:
 Generates the properties file required by the NER system to train.
 
-Need to remove "," from the training folder. Navigate to the train-dir and then:
-Command Line - rename ',' '' *
-# move this to a script
-
-and then from the location of the source file:
 Command Line - python gen_prop_file.py -t <train-dir> -f <file-name.prop>
+Example - python gen_prop_file.py -t ./data/output/en -f en_properties.prop
 Output - <file-name>.prop
 
-3. Training the NER system
+3. Training the NER system - Skip this step, moved to run_classifier.py
 
 Command Line - java -cp stanford-ner/stanford-ner.jar edu.stanford.nlp.ie.crf.CRFClassifier -prop <properties-file>.prop
 
 4. Testing the NER system
 
-Command Line - python run_classifier.py -t <test-dir>
+Command Line - python run_classifier.py -t <test-dir> -p <properties-file.prop>
+Example - python run_classifier.py -t ./test -p en_properties.prop
 Output - output-gaz/classified_<filename>
-
-# Add an example for each of the command line specifiers (for english)

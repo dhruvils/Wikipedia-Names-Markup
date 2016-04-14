@@ -1,0 +1,13 @@
+*~
+data/
+wikipedia-names*
+stanford-ner*
+gazzette.txt
+ner-model.ser.gz
+slf4j-1.7.21/
+gazzette.txt
+*.pickle
+*.prop
+nohup.out
+
+gazzette.txt

@@ -116,8 +116,8 @@ def markup_file(article_file, backlink_full, backlink_list, lang, stopwords):
 	output_filepath = "data/output/%s/marked_%s" %(lang, article_file)
 	d = os.path.dirname(output_filepath)
 
-    if not os.path.exists(d):
-        os.makedirs(d)
+	if not os.path.exists(d):
+		os.makedirs(d)
 
 	output = open(output_filepath, "w")
 	for word, mark in markup_list:

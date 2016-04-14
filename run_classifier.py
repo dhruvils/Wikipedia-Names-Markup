@@ -7,7 +7,7 @@ import optparse
 read the command line options
 """
 optparser = optparse.OptionParser()
-optparser.add_option("-t", "--test", dest="test", default="test/", help="Test directory")
+optparser.add_option("-t", "--test", dest="test", default="test", help="Test directory")
 optparser.add_option("-p", "--prop-file", dest="properties", help="Name of the properties file to train classifier")
 (opts, _) = optparser.parse_args()
 

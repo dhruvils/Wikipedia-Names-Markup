@@ -17,10 +17,10 @@ optparser.add_option("-w", "--stopwords", dest="stopword_file", help="Path to th
 (opts, _) = optparser.parse_args()
 
 def get_all_files(directory):
-    relativeFileList = []
-    for dirpath, dirs, files in os.walk(directory):
-        relativeFileList += [ (dirpath.replace(directory, '')) + ('' if dirpath == directory else '/') + filename for filename in files]
-    return relativeFileList
+	relativeFileList = []
+	for dirpath, dirs, files in os.walk(directory):
+		relativeFileList += [ (dirpath.replace(directory, '')) + ('' if dirpath == directory else '/') + filename for filename in files]
+	return relativeFileList
 
 """
 Please note, this function has been copied from: http://rosettacode.org/wiki/Levenshtein_distance#Python
@@ -28,25 +28,25 @@ Please note, this function has been copied from: http://rosettacode.org/wiki/Lev
 Used to find the string edit distance between two strings
 """
 def levenshteinDistance(str1, str2):
-    m = len(str1)
-    n = len(str2)
-    lensum = float(m + n)
-    d = []           
-    for i in range(m+1):
-        d.append([i])        
-    del d[0][0]    
-    for j in range(n+1):
-        d[0].append(j)       
-    for j in range(1,n+1):
-        for i in range(1,m+1):
-            if str1[i-1] == str2[j-1]:
-                d[i].insert(j,d[i-1][j-1])           
-            else:
-                minimum = min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+2)         
-                d[i].insert(j, minimum)
-    ldist = d[-1][-1]
-    ratio = (lensum - ldist)/lensum
-    return {'distance':ldist, 'ratio':ratio}
+	m = len(str1)
+	n = len(str2)
+	lensum = float(m + n)
+	d = []           
+	for i in range(m+1):
+		d.append([i])        
+	del d[0][0]    
+	for j in range(n+1):
+		d[0].append(j)       
+	for j in range(1,n+1):
+		for i in range(1,m+1):
+			if str1[i-1] == str2[j-1]:
+				d[i].insert(j,d[i-1][j-1])           
+			else:
+				minimum = min(d[i-1][j]+1, d[i][j-1]+1, d[i-1][j-1]+2)         
+				d[i].insert(j, minimum)
+	ldist = d[-1][-1]
+	ratio = (lensum - ldist)/lensum
+	return {'distance':ldist, 'ratio':ratio}
 
 """
 gather all backlinks from a folder into a single set

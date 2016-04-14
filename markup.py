@@ -196,7 +196,7 @@ file_count = 0
 backlinks_path = opts.backlinks_path
 (backlink_full, backlink_set) = get_all_backlinks(backlinks_path, opts.lang)
 
-words = pickle.load(open(stopword_file, 'r')) if not stopword_file == "" else []
+words = pickle.load(open(opts.stopword_file, 'r')) if not opts.stopword_file == "" else []
 
 for filename in get_all_files(opts.articles_path + "/" + opts.lang):
 	file_exists = markup_file(filename, backlink_full, backlink_set, opts.lang, words)

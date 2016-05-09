@@ -140,8 +140,6 @@ do not match stopwords
 """
 def pass2(markup_list, backlink_list, stopwords):
 	i = 0
-	matched_set = set()
-	unmatched_set = set()
 	while i < len(markup_list):
 		if not markup_list[i][1] == "PERS":
 			word = markup_list[i][0]
@@ -204,3 +202,6 @@ for filename in get_all_files(opts.articles_path + "/" + opts.lang):
 		file_count += 1
 		if (file_count > 12500):
 			break
+
+matched_set = set()
+unmatched_set = set()
